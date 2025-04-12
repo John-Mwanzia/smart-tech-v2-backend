@@ -12,11 +12,11 @@ import (
 
 type DB struct {
   Client *mongo.Client
-  userCollection  *mongo.Collection
-  productsCollection *mongo.Collection
-  featuredProductsCollection *mongo.Collection
-  ordersCollection *mongo.Collection
-  shippingCollection *mongo.Collection
+  UserCollection  *mongo.Collection
+  ProductsCollection *mongo.Collection
+  FeaturedProductsCollection *mongo.Collection
+  OrdersCollection *mongo.Collection
+  ShippingCollection *mongo.Collection
 
 }
 
@@ -27,7 +27,7 @@ func InitDB(){
   ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
   defer cancel()
 
-  clientOptions := options.Client().ApplyURI(AppEnv.mongodb_url)
+  clientOptions := options.Client().ApplyURI(AppEnv.Mongodb_url)
 
   client, err := mongo.Connect(ctx, clientOptions)
   if err != nil {
@@ -38,11 +38,11 @@ func InitDB(){
 
   DbInstance = &DB{
     Client: client,
-    userCollection : db.Collection("users"),
-    productsCollection : db.Collection("products"),
-    featuredProductsCollection : db.Collection("featuredProducts"),
-    ordersCollection : db.Collection("orders"),
-    shippingCollection : db.Collection("shipping"),
+    UserCollection : db.Collection("users"),
+    ProductsCollection : db.Collection("products"),
+    FeaturedProductsCollection : db.Collection("featuredProducts"),
+    OrdersCollection : db.Collection("orders"),
+    ShippingCollection : db.Collection("shipping"),
 
   }
 

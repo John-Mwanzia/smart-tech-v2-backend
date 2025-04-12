@@ -13,11 +13,9 @@ func main(){
   config.LoadEnv()
   config.InitDB() 
 
-  
   mux := http.NewServeMux()
   
-  mux.Handle("/api/seed", http.StripPrefix("/api/seed", handlers.SeedHandler))
-
+  mux.HandleFunc("/api/seed", handlers.SeedHandler)
   // http.StripPrefix("/api/seed", seedHandler);
   // http.StripPrefix("/api/users", userHandler)
   // http.StripPrefix("/api/products", productsHandler);
@@ -27,6 +25,10 @@ func main(){
   // http.StripPrefix("/api/checkout", stripeHandler);
   // http.StripPrefix("/api/order", protect, orderHandler);
 
-  // fmt.Println("Server started on port:",config.AppEnv.port)
-  // http.ListenAndServe(port, mux)
+  fmt.Println("Server started on port:", config.AppEnv.Port)
+  if err := http.ListenAndServe(":"+config.AppEnv.Port, mux); err != nil {
+    fmt.Println("Server error:", err)
 }
+
+}
+
