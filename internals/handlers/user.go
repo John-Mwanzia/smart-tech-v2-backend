@@ -7,6 +7,7 @@ import (
 
   "github.com/John-Mwanzia/smart-tech-v2-backend/internals/models"
   "github.com/John-Mwanzia/smart-tech-v2-backend/internals/services"
+  "github.com/John-Mwanzia/smart-tech-v2-backend/pkg"
 )
 
 func UserHandler(w http.ResponseWriter, r *http.Request){
@@ -38,7 +39,6 @@ func registerHandler(w http.ResponseWriter, r *http.Request){
   }
 
   //check for empty fields
-
   if user.Name == "" || user.Email == "" || user.Password == "" {
     http.Error(w, "All input fields are Required", http.StatusBadRequest)
     return 
@@ -75,6 +75,51 @@ func registerHandler(w http.ResponseWriter, r *http.Request){
 
 
 func signInHandler(w http.ResponseWriter, r *http.Request) {
+  var user models.User
+
+  if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+    http.Error(w, "Invalid request body", http.StatusBadRequest)
+    return 
+  }
+  if  user.Email == "" || user.Password == "" {
+    http.Error(w, "Email and Password fields are Required", http.StatusBadRequest)
+    return 
+  }
+
+  loggedUser, err := services.SignInUser(user)
+
+  if err != nil {
+    http.Error(w, err.Error(),http.StatusBadRequest)
+    return
+  }
+
+  //generate token 
+  token, err := pkg.GenerateJWT(user)
+
+  if err != nil {
+    http.Error(w, "Failed to generate token", http.StatusInternalServerError) 
+    return 
+  }
+
+
+ safeUser := models.ReturnSafeUser{ 
+  ID: loggedUser.ID, 
+  Name: loggedUser.Name, 
+  Email: loggedUser.Email, 
+  IsAdmin: loggedUser.IsAdmin, 
+}
+
+
+  response := map[string]interface{}{
+    "success": true,
+    "message": "Successfully logged in ",
+    "user" : safeUser,
+    "token" : token,
+  }
+
+  w.Header().Set("Content-Type", "application/json")
+  json.NewEncoder(w).Encode(response)
+
 
 
 }

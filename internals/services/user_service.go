@@ -32,3 +32,44 @@ func RegisterUser(user models.User) (*models.User, error) {
   }
 	return createdUser, nil  
 }
+
+
+func SignInUser(user models.User)(*models.User, error){
+  //check if user exists
+  existingUser, err := repository.FindUserByEmail(user.Email)
+
+  if err != nil {
+    return nil, fmt.Errorf("user not found ")
+  }
+
+  //validate password
+
+  if !pkg.CheckPassword(existingUser.Password, user.Password) {
+    return nil, fmt.Errorf("wrong credentials") 
+  }
+
+  return existingUser , nil 
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
