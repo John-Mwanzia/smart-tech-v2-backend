@@ -1,8 +1,9 @@
 package services
 
 import (
-  "github.com/John-Mwanzia/smart-tech-v2-backend/internals/repository"
-  "github.com/John-Mwanzia/smart-tech-v2-backend"
+	"github.com/John-Mwanzia/smart-tech-v2-backend"
+	"github.com/John-Mwanzia/smart-tech-v2-backend/internals/repository"
+	"github.com/John-Mwanzia/smart-tech-v2-backend/pkg"
 )
 
 func SeedCollections() error {
@@ -11,6 +12,12 @@ func SeedCollections() error {
   var users []interface{}
 
   for _, user := range data.InitialData.Users{
+    hashedPassword, err := pkg.HashPassword(user.Password)
+    if err != nil {
+      return err
+    }
+    
+    user.Password = hashedPassword
     users = append(users, user)
   }
 

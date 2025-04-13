@@ -16,6 +16,7 @@ func main(){
   mux := http.NewServeMux()
   
   mux.HandleFunc("/api/seed", handlers.SeedHandler)
+  mux.Handle("/api/users/", http.StripPrefix("/api/users",http.HandlerFunc(handlers.UserHandler)))
   // http.StripPrefix("/api/seed", seedHandler);
   // http.StripPrefix("/api/users", userHandler)
   // http.StripPrefix("/api/products", productsHandler);

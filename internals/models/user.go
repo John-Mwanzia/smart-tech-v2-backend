@@ -9,3 +9,10 @@ type User struct {
   Password string `json:"password"`
   IsAdmin bool `json:"isAdmin"`
 }
+type ReturnSafeUser struct {
+	ID      primitive.ObjectID `json:"id"`
+	Name    string             `json:"name"`
+	Email   string             `json:"email"`
+	IsAdmin bool               `json:"isAdmin"`
+}
+
