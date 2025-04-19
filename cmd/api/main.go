@@ -18,9 +18,6 @@ func main(){
   mux.HandleFunc("/api/seed", handlers.SeedHandler)
   mux.Handle("/api/users/", http.StripPrefix("/api/users",http.HandlerFunc(handlers.UserHandler)))
   mux.Handle("/api/products/", http.StripPrefix("/api/products", http.HandlerFunc(handlers.ProductsHandler)))
-  // http.StripPrefix("/api/seed", seedHandler);
-  // http.StripPrefix("/api/users", userHandler)
-  // http.StripPrefix("/api/products", productsHandler);
   // http.StripPrefix("/api/featuredProducts", featuredProductsHandler);
   // http.StripPrefix("/api/lipaNaMpesa", lipaNaMpesaHandler);
   // http.StripPrefix("/api/shipping", protect, shippingHandler);
