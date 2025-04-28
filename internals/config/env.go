@@ -8,7 +8,6 @@ import (
 )
 
 type Env struct {
-  Jwt_secret                string
   Password                  string
   Mongodb_url               string
   Safaricom_consumer_secret string
@@ -33,7 +32,6 @@ func LoadEnv() {
 
 
   AppEnv = Env{
-    Jwt_secret: os.Getenv("JWT_SECRET"),
     Password : os.Getenv("PASSWORD"),
     Mongodb_url: os.Getenv("MONGODB_URL"),
     Safaricom_consumer_secret: os.Getenv("SAFARICOM_CONSUMER_SECRET"),

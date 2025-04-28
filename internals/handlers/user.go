@@ -66,9 +66,10 @@ func registerHandler(w http.ResponseWriter, r *http.Request){
 
   w.Header().Set("Content-Type", "application/json")
   w.WriteHeader(http.StatusCreated)
-  json.NewEncoder(w).Encode(response)
-
-
+ if err = json.NewEncoder(w).Encode(response); err != nil {
+	 http.Error(w, "Failed to encode response", http.StatusInternalServerError)
+	 return
+ }
 }
 
 
@@ -89,15 +90,15 @@ func signInHandler(w http.ResponseWriter, r *http.Request) {
   loggedUser, err := services.SignInUser(user)
 
   if err != nil {
-    http.Error(w, err.Error(),http.StatusBadRequest)
+    http.Error(w, err.Error(),http.StatusUnauthorized)
     return
   }
 
   //generate token 
-  token, err := pkg.GenerateJWT(user)
+  token, err := pkg.GenerateJWT(*loggedUser)
 
   if err != nil {
-    http.Error(w, "Failed to generate token", http.StatusInternalServerError) 
+		http.Error(w, "Failed to generate token" + ": " + err.Error(), http.StatusInternalServerError) 
     return 
   }
 

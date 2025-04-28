@@ -71,3 +71,66 @@ func FindProductBySlug(slug string) (*models.Product, error)  {
 
 	return &product, nil 
 }
+
+
+
+
+func FindCategories()(any, error){
+	 ctx,cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	 defer cancel()
+
+	 productCategories, err := config.DbInstance.ProductsCollection.Distinct(ctx, "category", bson.M{})
+
+	 if err != nil {
+		 return nil , fmt.Errorf("failed fetch to product categories categories")
+	 }
+	 featuredCategories, err := config.DbInstance.FeaturedProductsCollection.Distinct(ctx, "category", bson.M{})
+
+	 if err != nil {
+		 return nil , fmt.Errorf("failed to fetch featured categories")
+	 }
+
+
+	 uniqueCats := make(map[string]bool)
+
+	 for _, category := range productCategories{
+		 if str, ok := category.(string); ok {
+			 uniqueCats[str] = true
+		 }
+	 }
+
+	 for _, category := range featuredCategories{
+		 if str, ok := category.(string); ok {
+			 uniqueCats[str] = true
+		 }
+	 }
+
+	 finalCategories := make([]string, 0, len(uniqueCats))
+
+	 for category := range uniqueCats{
+		 finalCategories = append(finalCategories, category)
+	 }
+
+
+	 return finalCategories, nil 
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

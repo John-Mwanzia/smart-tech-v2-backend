@@ -1,15 +1,14 @@
 package pkg
 
 import (
-	"os"
 	"time"
 
+	"github.com/John-Mwanzia/smart-tech-v2-backend/internals/config"
+	"github.com/John-Mwanzia/smart-tech-v2-backend/internals/models"
 	"github.com/golang-jwt/jwt"
-  "github.com/John-Mwanzia/smart-tech-v2-backend/internals/models"
 )
 
 
-var jwtSecret = []byte(os.Getenv("JWTSECRET"))
 
 func GenerateJWT(user models.User)(string, error){
   //create claims
@@ -28,7 +27,7 @@ func GenerateJWT(user models.User)(string, error){
 
   //sign the token
 
-  signedToken, err := token.SignedString(jwtSecret)
+  signedToken, err := token.SignedString([]byte(config.AppEnv.Jwtsecret))
   if err != nil {
     return "", err
   }

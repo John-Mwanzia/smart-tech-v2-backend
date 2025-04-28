@@ -71,7 +71,21 @@ func searchProducts(w http.ResponseWriter, r *http.Request){
 }
 
 
-func getCategories(w http.ResponseWriter, r *http.Request){
+func getCategories(w http.ResponseWriter, _*http.Request){
+	categories, err := repository.FindCategories()
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return 
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	if err = json.NewEncoder(w).Encode(categories); err != nil {
+		http.Error(w, "Failed to decode categories", http.StatusInternalServerError)
+		return 
+	}
+
 }
 
 

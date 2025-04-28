@@ -6,6 +6,7 @@ import (
 
 	"github.com/John-Mwanzia/smart-tech-v2-backend/internals/config"
 	"github.com/John-Mwanzia/smart-tech-v2-backend/internals/handlers"
+	middleware "github.com/John-Mwanzia/smart-tech-v2-backend/internals/middlewares"
 )
 
 
@@ -18,7 +19,8 @@ func main(){
   mux.HandleFunc("/api/seed", handlers.SeedHandler)
   mux.Handle("/api/users/", http.StripPrefix("/api/users",http.HandlerFunc(handlers.UserHandler)))
   mux.Handle("/api/products/", http.StripPrefix("/api/products", http.HandlerFunc(handlers.ProductsHandler)))
-  // http.StripPrefix("/api/featuredProducts", featuredProductsHandler);
+  mux.Handle("/api/featuredProducts/", http.StripPrefix("/api/featuredProducts", http.HandlerFunc(handlers.FeaturedProducts)));
+	mux.Handle("/api/shipping/", middleware.JwtAuthMiddleware(http.HandlerFunc(handlers.ShippingHandler)))
   // http.StripPrefix("/api/lipaNaMpesa", lipaNaMpesaHandler);
   // http.StripPrefix("/api/shipping", protect, shippingHandler);
   // http.StripPrefix("/api/checkout", stripeHandler);
